@@ -8,7 +8,8 @@ public class DirMonitorTest {
 
 	@Test
 	public void sizeTest() {
-		//Test assert
+		//Test assert 
+		//Test equal 
 	}
 
 }
