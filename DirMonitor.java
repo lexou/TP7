@@ -55,6 +55,9 @@ public class DirMonitor {
 		 return curr.toPath();
 	}
 	
+	public void applyAction(String prefix, MyAction action) throws IOException {
+	}
+	
 	
 	//INNER CLASS
 	public class PrefixFilter implements DirectoryStream.Filter<Path>{
