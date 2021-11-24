@@ -2,13 +2,14 @@ package fr.dauphine.javavance.td7;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class DirMonitor {
-	private Path chemin;
+	private static Path chemin;
 
 	//Constructeur
 	public DirMonitor(Path p) {
@@ -25,18 +26,7 @@ public class DirMonitor {
 		return chemin;
 	}
 	
-	//Methodes
-	public void printAll() {
-		
-		try {
-			for (Path path : Files.newDirectoryStream(Paths.get(chemin.toRealPath().toString()))) {
-				System.out.println(path.getFileName());
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
+	//Methode
 	public long sizeOfFiles() {
 		long somme = 0;
 		try {
@@ -64,6 +54,47 @@ public class DirMonitor {
 		   }
 		 return curr.toPath();
 	}
-}
+	
+	
+	//INNER CLASS
+	public class PrefixFilter implements DirectoryStream.Filter<Path>{
+		 long n;
+		
+		//Constructeur
+		public PrefixFilter(Path d, long x) {
+			DirMonitor.chemin = d;
+			n = x;
+		}
+		
+		//Getter
+		public long getN() {
+			return n;
+		}
+		
+		
+		//Methode
+		@Override
+		public boolean accept(Path entry) {
+			if (DirMonitor.this.sizeOfFiles()<=n) {
+				return true;
+			}
+			else { return false; }
+		}
+		
+		public void printAll() {
+			try {
+				for (Path path : Files.newDirectoryStream(Paths.get(DirMonitor.this.getChemin().toRealPath().toString()))) {
+					if (this.accept(path)) {
+						System.out.println(path.getFileName());
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	} //Fin INNER class
+	
+	
+} //Fin class DirMonitor
 
 
